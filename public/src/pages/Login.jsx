@@ -145,36 +145,37 @@ const FormContainer = styled.div`
     background-color: #00000076;
     padding: 2rem 4rem;
     border-radius: 2rem;
+  }
 
-    .brand {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      img {
-        width: 5rem;
-      }
-      h1 {
-        color: white;
-        text-transform: uppercase;
-      }
+  .brand {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 5rem;
     }
-
-    input {
+    h1 {
       color: white;
-      background-color: transparent;
-      width: 100%;
-      height: 3rem;
-      padding: 0.5rem;
-      border: 0.12rem solid MediumBlue;
-      border-radius: 0.2rem;
-      font-size: 1rem;
-      &:focus {
-        border: 0.1rem solid MediumPurple;
-        outline: none;
-      }
+      text-transform: uppercase;
     }
   }
+
+  form > input {
+    color: white;
+    background-color: transparent;
+    width: 100%;
+    height: 3rem;
+    padding: 0.5rem;
+    border: 0.12rem solid MediumBlue;
+    border-radius: 0.2rem;
+    font-size: 1rem;
+    &:focus {
+      border: 0.1rem solid MediumPurple;
+      outline: none;
+    }
+  }
+
   .login-option {
     width: 100%;
     color: white;
@@ -183,34 +184,36 @@ const FormContainer = styled.div`
     align-items: center;
     justify-content: space-between;
     gap: 0.2rem;
+  }
 
-    .remember-me {
-      display: flex;
-      flex-dirention: column;
-      gap: 0.1rem;
-      align-items: center;
-      input {
-        width: auto;
-      }
-      label {
-        font-size: 0.9rem;
-      }
+  .remember-me {
+    display: flex;
+    flex-direction: row;
+    gap: 0.1rem;
+    align-items: center;
+
+    input {
+      width: auto;
     }
-
-    button {
-      color: white;
-      background-color: MediumPurple;
-      border: none;
-      border-radius: 0.4rem;
-      padding: 0.5rem 0.7rem;
-      cursor: pointer;
-      text-transform: uppercase;
-      font-size: 0.8rem;
-      &:hover {
-        background-color: MediumBlue;
-      }
+    label {
+      font-size: 0.9rem;
     }
   }
+
+  button {
+    color: white;
+    background-color: MediumPurple;
+    border: none;
+    border-radius: 0.4rem;
+    padding: 0.5rem 0.7rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    &:hover {
+      background-color: MediumBlue;
+    }
+  }
+
   span {
     align-self: end;
     font-size: 0.8rem;
