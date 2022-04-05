@@ -27,17 +27,60 @@ module.exports.register = async (req, res, next) => {
 module.exports.login = async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    const target = await User.findOne({ username });
-    if (!target) {
-      return res.json({ status: false, msg: "The username do not exist!" });
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.json({
+        status: false,
+        msg: "Incorrect username or password!",
+      });
     }
-    const passwordCheck = await bcrypt.compare(password, target.password);
-    if (!passwordCheck) {
-      return res.json({ status: false, msg: "The password do not correct!" });
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.json({
+        status: false,
+        msg: "Incorrect username or password!",
+      });
     }
-    res.json({ status: true, msg: "" });
+    delete user.password;
+    res.json({ status: true, user });
   } catch (ex) {
     console.log(ex);
+    next(ex);
+  }
+};
+
+module.exports.setAvatar = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const avatarImage = req.body.image;
+    // const userData = User.findByIdAndUpdate(userId, {
+    //   isAvatarImageSet: true,
+    //   avatarImage,
+    // },
+    // (err, docs) => err ? console.log(err) : console.log(docs)
+    // );
+    const UserValid = await User.findOne({ userId });
+    if (UserValid) {
+      UserValid.updateOne(
+        { isAvatarImageSet: true, avatarImage },
+        (err, docs) => {
+          if (err) {
+            return res.json({
+              status: false,
+              msg: "Set Avatar error, please try again!",
+            });
+          } else {
+            return res.json({
+              isSet: UserValid.isAvatarImageSet,
+              image: UserValid.avatarImage,
+            });
+          }
+        }
+      );
+    } else {
+      res.json({ status: false, msg: "Set Avatar error, please try again!" });
+    }
+  } catch (ex) {
     next(ex);
   }
 };

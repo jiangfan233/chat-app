@@ -24,11 +24,11 @@ export default function Register() {
     theme: "dark",
   };
 
-  // useEffect(() => {
-  //   if (localStorage.getItem("chat-app-user")) {
-  //     navigate("/chat");
-  //   }
-  // });
+  useEffect(() => {
+    if (localStorage.getItem("chat-app-user")) {
+      navigate("/chat");
+    }
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();

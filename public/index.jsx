@@ -1,13 +1,13 @@
 import React from "react";
-import "./index.css";
-import App from "./App";
+import "./src/index.css";
+import App from "./src/App";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import Chat from "./pages/Chat";
+import Register from "./src/pages/Register";
+import Login from "./src/pages/Login";
+import Chat from "./src/pages/Chat";
 
 import {createRoot} from "react-dom/client"
-import SetAvatar from './pages/SetAvatar';
+import SetAvatar from './src/pages/SetAvatar';
 
 const root = document.getElementById("root");
 

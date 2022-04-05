@@ -6,16 +6,17 @@ import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { loginRoute } from "../utils/APIRoutes";
 
+// 对 localStorage.getItem 进行一次封装
+const getLocalValue = (key) => {
+  return localStorage.getItem(key);
+};
+
 function Login() {
   const navigate = useNavigate();
   const [values, setValues] = useState({
-    username: localStorage.getItem("username")
-      ? localStorage.getItem("username")
-      : "",
-    password: localStorage.getItem("password")
-      ? localStorage.getItem("password")
-      : "",
-    rememberMe: localStorage.getItem("rememberMe") ? true : false,
+    username: getLocalValue("username") ? getLocalValue("username") : "",
+    password: getLocalValue("password") ? getLocalValue("password") : "",
+    rememberMe: getLocalValue("rememberMe") ? true : false,
   });
 
   const toastOptions = {
@@ -28,11 +29,11 @@ function Login() {
     progress: undefined,
   };
 
-  // useEffect(() => {
-  //   if (localStorage.getItem("chat-app-user")) {
-  //     navigate("/chat");
-  //   }
-  // });
+  useEffect(() => {
+    if (localStorage.getItem("chat-app-user")) {
+      navigate("/chat");
+    }
+  });
 
   const handleChange = (event) => {
     // 如果不解构 values, 会把其他值覆盖为 undefined！
@@ -53,10 +54,8 @@ function Login() {
         toast.error(data.msg, toastOptions);
         return false;
       }
+      localStorage.setItem("chat-app-user", JSON.stringify(data.user));
       if (rememberMe) {
-        localStorage.setItem("username", username);
-        localStorage.setItem("password", password);
-
         localStorage.setItem("rememberMe", rememberMe);
       }
       navigate("/chat");
