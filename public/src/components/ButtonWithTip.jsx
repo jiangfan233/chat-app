@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export default function ButtonWithTip({ icon: Icon, onclick, tip, ...rest }) {
   return (
-    <Button onClick={() => onclick()} {...rest}>
+    <Button onClick={() => onclick && onclick()} {...rest}>
       {<Icon />}
       <span>{tip}</span>
     </Button>
@@ -31,7 +31,6 @@ const Button = styled.button`
   }
   span {
     display: flex;
-    flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
     color: black;
@@ -39,7 +38,8 @@ const Button = styled.button`
     opacity: 0%;
     position: absolute;
     z-index: 10;
-    width: 5rem;
+    min-width: 5rem;
+    max-width: 8rem;
     height: 1.4rem;
     background-color: #aca7a7;
     border-radius: 0.3rem;
@@ -53,9 +53,9 @@ const Button = styled.button`
       width: var(--trangle-len);
       height: var(--trangle-len);
       background-color: #aca7a7;
-      transform: rotate(45deg);
-      top: calc(var(--trangle-len) /2 * -1);
-      overflow: auto;
+      transform: scale(1) rotate(45deg);
+      top: calc(var(--trangle-len) / 2 * -1);
+      overflow: hidden;
     }
   }
 `;

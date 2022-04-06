@@ -4,6 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>chat-app</title>
+    <script>
+      // vite 似乎和 emoji-picker-react 不兼容
+      // https://github.com/vitejs/vite/issues/2618
+      window.global = window;
+    </script>
   </head>
   <body>
     <div id="root"></div>

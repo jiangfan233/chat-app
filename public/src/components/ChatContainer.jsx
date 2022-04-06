@@ -2,8 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import ButtonWithTip from "./ButtonWithTip";
+import ChatInput from "./ChatInput";
 
-export default function ChatContainer({ currentChat, currentUser, setCurrentChat }) {
+export default function ChatContainer({
+  currentChat,
+  currentUser,
+  setCurrentChat,
+}) {
   const handleCloseChat = () => {
     setCurrentChat(undefined);
   };
@@ -30,7 +35,7 @@ export default function ChatContainer({ currentChat, currentUser, setCurrentChat
         />
       </div>
       <div className="chat-messages"></div>
-      <div className="chat-input"></div>
+      <ChatInput currentUser={currentUser} />
     </Container>
   );
 }
@@ -38,15 +43,16 @@ export default function ChatContainer({ currentChat, currentUser, setCurrentChat
 const Container = styled.div`
   display: grid;
   grid-template-rows: 10% 80% 10%;
+  align-items: end;
+  margin: 0.2rem;
   .chat-header {
     display: grid;
     grid-template-columns: 10% 80% 10%;
     align-items: center;
     justify-content: center;
-    padding-top: 0.6rem;
-    .hidden-element{
+    .hidden-element {
       opacity: 0;
-    } 
+    }
     .chat-user {
       display: flex;
       flex-direction: row;

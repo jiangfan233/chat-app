@@ -36,8 +36,12 @@ const Chat = () => {
     getContacts(user._id);
   }, []);
 
+  const handleClick = (evt) => {
+    console.log(evt.target.className);
+  }
+
   return (
-    <Container>
+    <Container onClick={handleClick}>
       {currentUser && contacts ? (
         <div className="container">
           <Contacts
