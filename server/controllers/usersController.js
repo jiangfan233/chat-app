@@ -52,34 +52,41 @@ module.exports.login = async (req, res, next) => {
 module.exports.setAvatar = async (req, res, next) => {
   try {
     const userId = req.params.id;
+    console.log(userId);
     const avatarImage = req.body.image;
-    // const userData = User.findByIdAndUpdate(userId, {
-    //   isAvatarImageSet: true,
-    //   avatarImage,
-    // },
-    // (err, docs) => err ? console.log(err) : console.log(docs)
-    // );
-    const UserValid = await User.findOne({ userId });
-    if (UserValid) {
-      UserValid.updateOne(
-        { isAvatarImageSet: true, avatarImage },
-        (err, docs) => {
-          if (err) {
-            return res.json({
-              status: false,
-              msg: "Set Avatar error, please try again!",
-            });
-          } else {
-            return res.json({
-              isSet: UserValid.isAvatarImageSet,
-              image: UserValid.avatarImage,
-            });
-          }
+    return User.updateOne(
+      { _id: userId },
+      { $set: { isAvatarImageSet: true, avatarImage } }
+    )
+      .then((result) => {
+        if (result.modifiedCount > 0) {
+          return res.json({
+            isSet: true,
+            image: avatarImage,
+          });
         }
-      );
-    } else {
-      res.json({ status: false, msg: "Set Avatar error, please try again!" });
-    }
+        return res.json({
+          status: false,
+          msg: "Set Avatar error, please try again!",
+        });
+      })
+      .catch((err) => console.log(`crror: ${err}`));
+    
+  } catch (ex) {
+    next(ex);
+  }
+};
+
+module.exports.getAllusers = async (req, res, next) => {
+  try {
+    // 排除当前用户的 id
+    const users = await User.find({ _id: { $ne: req.params.id } }).select([
+      "email",
+      "username",
+      "avatarImage",
+      "_id",
+    ]);
+    return res.json(users);
   } catch (ex) {
     next(ex);
   }
