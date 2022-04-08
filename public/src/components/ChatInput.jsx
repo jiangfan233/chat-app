@@ -1,34 +1,42 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import ContentEditable from "react-contenteditable";
 import { AiOutlineSend } from "react-icons/ai";
 import { BsEmojiSmileFill } from "react-icons/bs";
-import Picker from "emoji-picker-react"
+import Picker from "emoji-picker-react";
+import axios from "axios";
+import { sendMessageRoute } from "./../utils/APIRoutes";
 
-export default function ChatInput({ currentUser }) {
+export default function ChatInput({ currentUserId, currentChatId }) {
+  // react-contenteditable 和 useState 不兼容，使用 useRef
+  // https://github.com/lovasoa/react-contenteditable/issues/161
   const [value, setValue] = useState("");
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  // const [chosenEmoji, setChosenEmoji] = useState(null);
+  const userInput = useRef();
 
-  const handleSendMessage = (event) => {
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  const handleSendMessage = async (event) => {
     event.preventDefault();
     console.log(value);
-    // console.log(event);
+    const { data } = await axios.post(sendMessageRoute, {
+      msg: value,
+      fromId: currentUserId,
+      toId: currentChatId,
+    });
+    console.log(data.msg);
   };
 
   const handleEmojiClick = (event, emojiObject) => {
-    console.log(emojiObject);
-    // setChosenEmoji(emojiObject.emoji);
-    setValue(value+emojiObject.emoji);
+    setValue(value + emojiObject.emoji);
   };
 
   const handleValueChange = (event) => {
-    setValue(event.target.value);
+    setValue(userInput.current.innerText);
   };
 
   const handleShowEmoji = () => {
     setShowEmojiPicker(!showEmojiPicker);
-  }
+  };
 
   return (
     <Container>
@@ -36,16 +44,18 @@ export default function ChatInput({ currentUser }) {
         <button onClick={handleShowEmoji}>
           <BsEmojiSmileFill />
         </button>
-        {showEmojiPicker && <Picker id="emoji-picker" onEmojiClick={handleEmojiClick} />}
+        {showEmojiPicker && (
+          <Picker id="emoji-picker" onEmojiClick={handleEmojiClick} />
+        )}
       </div>
       <form onSubmit={handleSendMessage}>
         <ContentEditable
           // 并没有 placeholder 这一属性，通过css实现
           placeholder="type message..."
+          innerRef={userInput}
           html={value}
           className="message-text"
           contentEditable="true"
-          // value={value}
           onChange={handleValueChange}
         />
         <button type="submit">
@@ -91,7 +101,6 @@ const Container = styled.div`
       z-index: 10;
       bottom: 150%;
       left: 10%;
-      
     }
   }
   form {

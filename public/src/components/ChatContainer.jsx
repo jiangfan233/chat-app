@@ -35,7 +35,10 @@ export default function ChatContainer({
         />
       </div>
       <div className="chat-messages"></div>
-      <ChatInput currentUser={currentUser} />
+      <ChatInput
+        currentUserId={currentUser._id}
+        currentChatId={currentChat._id}
+      />
     </Container>
   );
 }

@@ -37,8 +37,8 @@ const Chat = () => {
   }, []);
 
   const handleClick = (evt) => {
-    console.log(evt.target.className);
-  }
+    // console.log(evt.target.className);
+  };
 
   return (
     <Container onClick={handleClick}>
