@@ -36,7 +36,9 @@ export default function ChatContainer({
     setInterval(() => {
       if (socketRef.current) {
         socketRef.current.on("messageReceive", (data) => {
-          setAllMessages([data, ...allMessages]);
+          if (data.message.users.from === currentChat._id) {
+            setAllMessages([data, ...allMessages]);
+          }
         });
       }
     }, duration);
@@ -109,8 +111,8 @@ export default function ChatContainer({
       {allMessages ? (
         <Messages
           allMessages={allMessages}
-          currentUserId={currentUser._id}
-          currentChatId={currentChat._id}
+          currentUser={currentUser}
+          currentChat={currentChat}
         />
       ) : (
         <SimpleLoader />
@@ -127,10 +129,13 @@ export default function ChatContainer({
 }
 
 const Container = styled.div`
+  position: relative;
   display: grid;
-  grid-template-rows: 10% auto auto;
-  align-items: end;
-  margin: 0.2rem;
+  grid-template-rows: 10% minmax(50%, 85%) min-content;
+  align-items: center;
+  padding: 0.2rem 0;
+  max-height: inherit;
+  max-width: 100%;
   .chat-header {
     display: grid;
     grid-template-columns: 10% 80% 10%;

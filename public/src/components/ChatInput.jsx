@@ -80,9 +80,10 @@ const Container = styled.div`
   max-height: 8rem;
   outline: none;
   border-radius: 1.5rem;
-  margin: 0 0.4rem;
+  margin: 0 .5rem;
   gap: 0.2rem;
   cursor: pointer;
+  min-height: 2.5rem;
   .emoji {
     cursor: pointer;
     position: relative;
