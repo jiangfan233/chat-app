@@ -1,14 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-import { allUserRoute } from "../utils/APIRoutes";
+import { allUserRoute, host } from "../utils/APIRoutes";
 import Contacts from "./Contacts";
 import SimpleLoader from "../components/SimpleLoader";
 import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
+import { io } from "socket.io-client";
 
 const Chat = () => {
+  const socketRef = useRef();
   const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -26,22 +28,24 @@ const Chat = () => {
   useEffect(() => {
     const userJson = localStorage.getItem("chat-app-user");
     if (!userJson) {
-      navigate("/login");
+      navigate("/login", ()=>{
+        localStorage.clear();
+      });
+      return;
     }
     const user = JSON.parse(userJson);
     if (!user.isAvatarImageSet) {
       navigate("/setAvatar");
     }
     setCurrentUser(user);
+    socketRef.current = io(host);
+    socketRef.current.emit("add-user", user._id);
+    console.log(socketRef.current);
     getContacts(user._id);
   }, []);
 
-  const handleClick = (evt) => {
-    // console.log(evt.target.className);
-  };
-
   return (
-    <Container onClick={handleClick}>
+    <Container>
       {currentUser && contacts ? (
         <div className="container">
           <Contacts
@@ -54,6 +58,7 @@ const Chat = () => {
               currentChat={currentChat}
               currentUser={currentUser}
               setCurrentChat={setCurrentChat}
+              socketRef={socketRef}
             />
           ) : (
             <Welcome currentUser={currentUser} />
@@ -80,6 +85,7 @@ const Container = styled.div`
   .container {
     height: 85vh;
     width: 85vw;
+    max-height: 85vh;
     background-color: #00000076;
     display: grid;
     grid-template-columns: 25% 75%;

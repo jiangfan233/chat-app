@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
 const userRoutes = require("./routes/userRoutes");
-const messageRoutes = require("./routes/messageRoutes")
+const messageRoutes = require("./routes/messageRoutes");
+const socket = require("socket.io");
 
 const app = express();
 require("dotenv").config();
@@ -31,3 +31,30 @@ const server = app.listen(process.env.PORT, () => {
   // console.log(process.env.PORT);
   console.log(`Server Started on Port ${process.env.PORT}`);
 });
+
+const io = socket(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    // credentials: true,
+  },
+});
+
+global.onlineUsers = new Map();
+
+io.on("connection", (socket) => {
+  global.chatSocket = socket;
+  socket.on("add-user", (userId) => {
+    onlineUsers.set(userId, socket.id);
+  });
+
+
+  socket.on("send-message", (data) => {
+    const chatUserSocket = onlineUsers.get(data.message.users.to);
+    if (chatUserSocket) {
+      // 对方必须在线
+      socket.to(chatUserSocket).emit("messageReceive", data);
+    }
+  });
+});
+
+   

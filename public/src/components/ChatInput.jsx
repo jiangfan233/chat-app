@@ -4,10 +4,17 @@ import ContentEditable from "react-contenteditable";
 import { AiOutlineSend } from "react-icons/ai";
 import { BsEmojiSmileFill } from "react-icons/bs";
 import Picker from "emoji-picker-react";
+
+import { Format } from "../utils/common";
+
 import axios from "axios";
 import { sendMessageRoute } from "./../utils/APIRoutes";
 
-export default function ChatInput({ currentUserId, currentChatId }) {
+export default function ChatInput({
+  onSendMessage,
+  currentUserId,
+  currentChatId,
+}) {
   // react-contenteditable 和 useState 不兼容，使用 useRef
   // https://github.com/lovasoa/react-contenteditable/issues/161
   const [value, setValue] = useState("");
@@ -15,15 +22,10 @@ export default function ChatInput({ currentUserId, currentChatId }) {
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-  const handleSendMessage = async (event) => {
+  const handleSendMessageAndReset = (event) => {
     event.preventDefault();
-    console.log(value);
-    const { data } = await axios.post(sendMessageRoute, {
-      msg: value,
-      fromId: currentUserId,
-      toId: currentChatId,
-    });
-    console.log(data.msg);
+    onSendMessage(value);
+    setValue("");
   };
 
   const handleEmojiClick = (event, emojiObject) => {
@@ -48,7 +50,7 @@ export default function ChatInput({ currentUserId, currentChatId }) {
           <Picker id="emoji-picker" onEmojiClick={handleEmojiClick} />
         )}
       </div>
-      <form onSubmit={handleSendMessage}>
+      <form onSubmit={handleSendMessageAndReset}>
         <ContentEditable
           // 并没有 placeholder 这一属性，通过css实现
           placeholder="type message..."

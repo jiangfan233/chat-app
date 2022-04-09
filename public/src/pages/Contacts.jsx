@@ -33,30 +33,28 @@ export default function Contacts({ contacts, currentUser, onChangeChat }) {
           <img src={logo} alt="logo" />
           <h3>Snappy</h3>
         </div>
-        <div className="contacts">
-          {contacts.map(
-            (contact, index) => (
-              (
-                <div
-                  className={
-                    index === currentSelected ? "contact-selected" : "contact"
-                  }
-                  key={index}
-                  onClick={() => changeCurrentChat(index, contact)}
-                >
-                  <div className="avatar">
-                    <img
-                      src={`data:image/svg+xml;base64,${contact.avatarImage}`}
-                      alt="avatar"
-                    />
-                  </div>
-                  <div className="username">
-                    <h3>{contact.username}</h3>
-                  </div>
+        <div className="contacts-box">
+          <div className="contacts">
+            {contacts.map((contact, index) => (
+              <div
+                className={
+                  "contact " + (index === currentSelected ? "selected" : "")
+                }
+                key={index}
+                onClick={() => changeCurrentChat(index, contact)}
+              >
+                <div className="avatar">
+                  <img
+                    src={`data:image/svg+xml;base64,${contact.avatarImage}`}
+                    alt="avatar"
+                  />
                 </div>
-              )
-            )
-          )}
+                <div className="username">
+                  <h3>{contact.username}</h3>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="current-user">
           <ButtonWithTip
@@ -85,7 +83,7 @@ const Container = styled.div`
   color: white;
   display: grid;
   grid-template-rows: 10% 75% 15%;
-  overflow: hidden;
+  max-height: inherit;
   background-color: #080420;
   .brand {
     display: flex;
@@ -101,13 +99,8 @@ const Container = styled.div`
       text-transform: uppercase;
     }
   }
-  .contacts {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: auto;
-    gap: 0.8rem;
+  .contacts-box {
+    overflow-y: auto;
     &::-webkit-scrollbar {
       width: 0.2rem;
       &-thumb {
@@ -116,44 +109,41 @@ const Container = styled.div`
         border: 1rem;
       }
     }
-    .contact {
+    .contacts {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      background-color: #ffffff39;
-      width: 90%;
-      cursor: pointer;
-      border-radius: 0.2rem;
-      padding: 0.4rem;
-      gap: 1rem;
-      align-items: center;
-      transition: 0.5s ease-in-out;
-      .avatar {
-        width: 3rem;
+      gap: 0.5rem;
+      margin: 0.4rem 0;
+      .contact {
+        display: grid;
+        grid-template-columns: 20% auto auto;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff39;
+        width: 90%;
+        cursor: pointer;
+        border-radius: 0.2rem;
+        padding: 0.4rem;
+        gap: 1rem;
+        align-items: center;
+        transition: 0.5s ease-in-out;
+        .avatar {
+          width: 3rem;
+        }
+        .username {
+          color: white;
+        }
       }
-      .username {
-        color: white;
-      }
-    }
-    .contact-selected {
-      background-color: #9186f3;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      width: 90%;
-      gap: 1rem;
-      cursor: pointer;
-      border-radius: 0.2rem;
-      padding: 0.4rem;
-      .avatar {
-        width: 3rem;
+      .selected {
+        background-color: #9186f3;
       }
     }
   }
   .current-user {
-    padding: 0 .8rem;
+    padding: 0 0.8rem;
     background-color: #0d0d30;
     display: grid;
     grid-template-columns: 15% 70% 15%;
