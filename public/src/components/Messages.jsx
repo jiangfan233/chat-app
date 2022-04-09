@@ -20,7 +20,16 @@ export default function Messages({ allMessages, currentUser, currentChat }) {
               ) : (
                 <div />
               )}
-              <p className="msg">{text}</p>
+              <div
+                className={
+                  "msg-box " +
+                  (users.from === currentUser._id
+                    ? "user-msg-box"
+                    : "other-msg-box")
+                }
+              >
+                <p>{text}</p>
+              </div>
               {users.from === currentUser._id ? (
                 <span>
                   <img
@@ -46,10 +55,10 @@ const Container = styled.div`
   overflow-y: auto;
   padding: 0.5rem 0.2rem;
   &::-webkit-scrollbar {
-    width: .2rem;
+    width: 0.2rem;
     &-thumb {
       background-color: #ffffff40;
-      width: .2rem;
+      width: 0.2rem;
       border: 1rem;
     }
   }
@@ -72,17 +81,26 @@ const Container = styled.div`
           width: 2.5rem;
         }
       }
-      .msg {
-        font-size: 1.2rem;
-        color: white;
-        background-color: #96828276;
-        padding: 0.2rem 0.3rem;
-        border-radius: 0.4rem;
+      .msg-box {
         display: inline-flex;
-        align-items: center;
-        min-height: 3rem;
-        word-wrap: break-word;
-        word-break: break-all;
+        p {
+          font-size: 1.2rem;
+          color: white;
+          background-color: #96828276;
+          padding: 0 0.3rem;
+          border-radius: 0.4rem;
+          display: inline-flex;
+          align-items: center;
+          width: fit-content;
+          word-wrap: break-word;
+          word-break: break-all;
+        }
+      }
+      .user-msg-box {
+        justify-content: flex-end;
+      }
+      .other-msg-box {
+        justify-content: flex-start;
       }
     }
   }
