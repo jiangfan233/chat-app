@@ -16,11 +16,11 @@ createRoot(root).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route path="register" element={<Register />} />
-          <Route path="login" element={<Login />} />
           <Route path="chat" element={<Chat />} />
-          <Route path="setAvatar" element={<SetAvatar/>} />
+          <Route path="setAvatar" element={<SetAvatar />} />
         </Route>
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

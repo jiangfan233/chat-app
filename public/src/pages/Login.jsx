@@ -84,7 +84,7 @@ function Login() {
   return (
     <>
       <FormContainer>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete={"false"}>
           <div className="brand">
             <img src={logo} alt="logo" />
             <h1>Snappy</h1>

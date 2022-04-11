@@ -78,6 +78,7 @@ export default function Register() {
     <>
       <FormContainer>
         <form
+          autoComplete={"false"}
           onSubmit={(event) => {
             handleSubmit(event);
           }}
