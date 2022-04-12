@@ -19,12 +19,12 @@ export default function Contacts({ contacts, currentUser, onChangeChat }) {
   const changeCurrentChat = (index, contact) => {
     setCurrentSelected(index);
     onChangeChat(contact);
-  }
+  };
 
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
-  }
+  };
 
   return (
     <>

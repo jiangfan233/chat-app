@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { allUserRoute, host } from "../utils/APIRoutes";
 import Contacts from "./Contacts";
@@ -16,6 +17,16 @@ const Chat = () => {
   const [currentUser, setCurrentUser] = useState(undefined);
   const [currentChat, setCurrentChat] = useState(undefined);
 
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 8000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
+
   const getContacts = useCallback(async (id) => {
     const { data } = await axios.get(`${allUserRoute}/${id}`);
     setContacts(data);
@@ -25,10 +36,29 @@ const Chat = () => {
     setCurrentChat(chat);
   };
 
+  const connectSocketServer = (key, data) => {
+    socketRef.current.emit(key, data);
+  };
+
+  const connectionDaemon = (uri, duration, fn, triggerDataObj) => {
+    socketRef.current = io(uri);
+    let isOnlineState = false;
+    setInterval(() => {
+      fn(triggerDataObj.key, triggerDataObj.data);
+      if (socketRef.current.connected) {
+        isOnlineState == false ? toast.info("You are online now.", toastOptions) : ()=>{};
+        isOnlineState = true;
+      } else {
+        toast.error("Sorry, but you are offline.Reconnecting...", toastOptions);
+        isOnlineState = false;
+      }
+    }, duration);
+  };
+
   useEffect(() => {
     const userJson = localStorage.getItem("chat-app-user");
     if (!userJson) {
-      navigate("/login", ()=>{
+      navigate("/login", () => {
         localStorage.clear();
       });
       return;
@@ -38,9 +68,10 @@ const Chat = () => {
       navigate("/setAvatar");
     }
     setCurrentUser(user);
-    socketRef.current = io(host);
-    socketRef.current.emit("add-user", user._id);
-    console.log(socketRef.current);
+    connectionDaemon(host, 1000, connectSocketServer, {
+      key: "add-user",
+      data: user._id,
+    });
     getContacts(user._id);
   }, []);
 
@@ -63,6 +94,7 @@ const Chat = () => {
           ) : (
             <Welcome currentUser={currentUser} />
           )}
+          <ToastContainer />
         </div>
       ) : (
         <SimpleLoader />

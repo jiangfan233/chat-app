@@ -33,15 +33,13 @@ export default function ChatContainer({
 
   // 监听socket中的消息；
   const receiveMsgFromSocket = (duration) => {
-    setInterval(() => {
-      if (socketRef.current) {
-        socketRef.current.on("messageReceive", (data) => {
-          if (data.message.users.from === currentChat._id) {
-            setAllMessages([data, ...allMessages]);
-          }
-        });
-      }
-    }, duration);
+    if (socketRef.current) {
+      socketRef.current.on("messageReceive", (data) => {
+        if (data.message.users.from === currentChat._id) {
+          setAllMessages([data, ...allMessages]);
+        }
+      });
+    }
   };
 
   // 从数据库获取所有消息
