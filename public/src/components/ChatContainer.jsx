@@ -32,7 +32,7 @@ export default function ChatContainer({
   };
 
   // 监听socket中的消息；
-  const receiveMsgFromSocket = (duration) => {
+  const receiveMsgFromSocket = () => {
     if (socketRef.current) {
       socketRef.current.on("messageReceive", (data) => {
         if (data.message.users.from === currentChat._id) {
@@ -79,11 +79,11 @@ export default function ChatContainer({
 
   useEffect(() => {
     getAllMessages();
-  }, [currentChat]);
+  }, [currentChat, allMessages]);
 
   useEffect(() => {
-    receiveMsgFromSocket(1000);
-  });
+    receiveMsgFromSocket();
+  }, []);
 
   return (
     <Container>

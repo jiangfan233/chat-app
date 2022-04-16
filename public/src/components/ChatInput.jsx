@@ -1,25 +1,16 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import ContentEditable from "react-contenteditable";
 import { AiOutlineSend } from "react-icons/ai";
 import { BsEmojiSmileFill } from "react-icons/bs";
 import Picker from "emoji-picker-react";
-
-import { Format } from "../utils/common";
-
-import axios from "axios";
-import { sendMessageRoute } from "./../utils/APIRoutes";
+import DivInput from "./DivInput";
 
 export default function ChatInput({
   onSendMessage,
-  currentUserId,
-  currentChatId,
 }) {
   // react-contenteditable 和 useState 不兼容，使用 useRef
   // https://github.com/lovasoa/react-contenteditable/issues/161
   const [value, setValue] = useState("");
-  const userInput = useRef();
-
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const handleSendMessageAndReset = (event) => {
@@ -30,10 +21,6 @@ export default function ChatInput({
 
   const handleEmojiClick = (event, emojiObject) => {
     setValue(value + emojiObject.emoji);
-  };
-
-  const handleValueChange = (event) => {
-    setValue(userInput.current.innerText);
   };
 
   const handleShowEmoji = () => {
@@ -51,15 +38,7 @@ export default function ChatInput({
         )}
       </div>
       <form onSubmit={handleSendMessageAndReset}>
-        <ContentEditable
-          // 并没有 placeholder 这一属性，通过css实现
-          placeholder="type message..."
-          innerRef={userInput}
-          html={value}
-          className="message-text"
-          contentEditable="true"
-          onChange={handleValueChange}
-        />
+        <DivInput value={value} setValue={setValue}  />
         <button type="submit">
           <AiOutlineSend className="send-icon" />
         </button>
@@ -115,34 +94,7 @@ const Container = styled.div`
     border: none;
     border-radius: inherit;
     align-items: center;
-    .message-text {
-      cursor: text;
-      display: inline-flex;
-      max-height: inherit;
-      width: 100%;
-      font-size: 1.2rem;
-      row-gap: 0.1rem;
-      resize: none;
-      border: none;
-      outline: none;
-      flex-wrap: wrap;
-      overflow-y: auto;
-      word-break: break-word;
-      float: left;
-      &:empty::before {
-        content: attr(placeholder);
-        color: gray;
-      }
-      &::-webkit-scrollbar {
-        /* background-color: red; */
-        width: 0.2rem;
-        &-thumb {
-          background-color: #11010167;
-          width: 0.1rem;
-          border: 1rem;
-        }
-      }
-    }
+   
     button {
       cursor: pointer;
       display: inline-flex;

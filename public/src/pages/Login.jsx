@@ -33,7 +33,7 @@ function Login() {
     if (localStorage.getItem("chat-app-user")) {
       navigate("/chat");
     }
-  });
+  }, []);
 
   const handleChange = (event) => {
     // 如果不解构 values, 会把其他值覆盖为 undefined！

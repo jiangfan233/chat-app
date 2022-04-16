@@ -13,7 +13,9 @@ const App = () => {
       navigate(from);
       return;
     }
-  });
+    navigate("/chat");
+    return;
+  }, []);
 
   return <Outlet />;
 };
